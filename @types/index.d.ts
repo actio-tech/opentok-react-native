@@ -435,4 +435,34 @@ declare module "opentok-react-native" {
    * https://github.com/opentok/opentok-react-native/blob/master/docs/OTSubscriber.md
    */
   export class OTSubscriber extends React.Component<OTSubscriberProps> {}
+
+  /**
+   * OpenTok native module
+   */
+  declare const OT: {
+    /**
+     * Register native events which application subscribes to
+     */
+    setNativeEvents: (events: string[]) => void,
+
+    /**
+     * Used to send a signal to the session
+     */
+    sendSignal: (sessionId: string, message: { data: string, to: string, type: string }, handler?: (e: Error) => void) => void,
+
+    /**
+     * Subscribe/unsubscribe to audio stream
+     */
+    subscribeToAudio: (streamId: string, enabled: boolean) => void,
+
+    /**
+     * Subscribe/unsubscribe to video stream
+     */
+    subscribeToVideo: (streamId: string, enabled: boolean) => void,
+
+    /**
+     * Enable/disable opentok plugin logs
+     */
+    enableLogs: (enabled: boolean) => void,
+  }
 }
