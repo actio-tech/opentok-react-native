@@ -4,6 +4,8 @@ package com.opentokreactnative;
  * Created by manik on 1/29/18.
  */
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.util.Log;
 import android.widget.FrameLayout;
 import android.view.View;
@@ -126,6 +128,14 @@ public class OTSessionManager extends ReactContextBaseJavaModule
 
     @ReactMethod
     public void connect(String sessionId, String token, Callback callback) {
+
+        AudioManager audioManager = (AudioManager) getReactApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager != null) {
+            audioManager.setBluetoothScoOn(true
+            );
+            audioManager.startBluetoothSco();
+        }
+
         ConcurrentHashMap<String, Session> mSessions = sharedState.getSessions();
         ConcurrentHashMap<String, Callback> mSessionConnectCallbacks = sharedState.getSessionConnectCallbacks();
         mSessionConnectCallbacks.put(sessionId, callback);
@@ -282,6 +292,11 @@ public class OTSessionManager extends ReactContextBaseJavaModule
         mSessionDisconnectCallbacks.put(sessionId, callback);
         if (mSession != null) {
             mSession.disconnect();
+        }
+
+        AudioManager audioManager = (AudioManager) getReactApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager != null) {
+            audioManager.stopBluetoothSco();
         }
     }
 
