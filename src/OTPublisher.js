@@ -96,7 +96,7 @@ class OTPublisher extends Component {
   };
   createPublisher() {
     if (Platform.OS === 'android') {
-      checkAndroidPermissions()
+      checkAndroidPermissions(!!this.props.videoTrack)
         .then(() => {
           this.initPublisher();
         })
