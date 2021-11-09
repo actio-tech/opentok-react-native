@@ -4,10 +4,11 @@ import { each } from 'underscore';
 const OT = NativeModules.OTSessionManager;
 const nativeEvents = new NativeEventEmitter(OT);
 
-const checkAndroidPermissions = () => new Promise((resolve, reject) => {
-  PermissionsAndroid.requestMultiple([
-    PermissionsAndroid.PERMISSIONS.CAMERA,
-    PermissionsAndroid.PERMISSIONS.RECORD_AUDIO])
+const checkAndroidPermissions = (checkVideoPermission: boolean) => new Promise((resolve, reject) => {
+  PermissionsAndroid.requestMultiple(
+      [PermissionsAndroid.PERMISSIONS.RECORD_AUDIO]
+        .concat(checkVideoPermission ? [PermissionsAndroid.PERMISSIONS.CAMERA] : [])
+    )
     .then((result) => {
       const permissionsError = {};
       permissionsError.permissionsDenied = [];
