@@ -1,33 +1,8 @@
-import { NativeModules, NativeEventEmitter, PermissionsAndroid } from 'react-native';
+import { NativeModules, NativeEventEmitter } from 'react-native';
 import { each } from 'underscore';
 
 const OT = NativeModules.OTSessionManager;
 const nativeEvents = new NativeEventEmitter(OT);
-
-const checkAndroidPermissions = (checkVideoPermission: boolean) => new Promise((resolve, reject) => {
-  PermissionsAndroid.requestMultiple(
-      [PermissionsAndroid.PERMISSIONS.RECORD_AUDIO]
-        .concat(checkVideoPermission ? [PermissionsAndroid.PERMISSIONS.CAMERA] : [])
-    )
-    .then((result) => {
-      const permissionsError = {};
-      permissionsError.permissionsDenied = [];
-      each(result, (permissionValue, permissionType) => {
-        if (permissionValue === 'denied') {
-          permissionsError.permissionsDenied.push(permissionType);
-          permissionsError.type = 'Permissions error';
-        }
-      });
-      if (permissionsError.permissionsDenied.length > 0) {
-        reject(permissionsError);
-      } else {
-        resolve();
-      }
-    })
-    .catch((error) => {
-      reject(error);
-    });
-});
 
 const setNativeEvents = (events) => {
   const eventNames = Object.keys(events);
@@ -59,7 +34,6 @@ const removeNativeEvents = (events) => {
 export {
   OT,
   nativeEvents,
-  checkAndroidPermissions,
   setNativeEvents,
   removeNativeEvents,
 };
