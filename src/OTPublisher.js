@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { View, Platform } from 'react-native';
 import { isNull } from 'underscore';
 import {
-  checkAndroidPermissions,
   OT,
   removeNativeEvents,
   nativeEvents,
@@ -98,17 +97,7 @@ class OTPublisher extends Component {
     }
   };
   createPublisher() {
-    if (Platform.OS === 'android') {
-      checkAndroidPermissions(!!this.props.properties?.videoTrack)
-        .then(() => {
-          this.initPublisher();
-        })
-        .catch((error) => {
-          this.otrnEventHandler(error);
-        });
-    } else {
-      this.initPublisher();
-    }
+    this.initPublisher();
   }
   initPublisher() {
     const publisherProperties = sanitizeProperties(this.props.properties);
